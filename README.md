@@ -15,6 +15,11 @@ A complete guide to duplicating Overwatch 2 loot boxes earned through Twitch dro
   - [4. Terminology](#4-terminology)
   - [Phase 0 — Device parity, clock discipline, and cadence fingerprint](#phase-0--device-parity-clock-discipline-and-cadence-fingerprint)
   - [Phase A — Baseline acquisition](#phase-a--baseline-acquisition)
+  - [Part 0.5 — Workstation provisioning](#part-05--workstation-provisioning)
+    - [Provisioning 1 — Workspace and script](#provisioning-1--workspace-and-script)
+    - [Provisioning 2 — Python](#provisioning-2--python)
+    - [Provisioning 3 — 7-Zip (the capsule archive)](#provisioning-3--7-zip-the-capsule-archive)
+    - [Provisioning 4 — Verification run and acceptance gate](#provisioning-4--verification-run-and-acceptance-gate)
 - [Part 1 — Observation and checkpoint construction](#part-1--observation-and-checkpoint-construction)
   - [Phase B1 — Coarse calibration](#phase-b1--coarse-calibration)
   - [Phase B2 — Fine calibration](#phase-b2--fine-calibration)
@@ -63,7 +68,7 @@ This method duplicates Overwatch 2 loot boxes obtained through Twitch drop claim
 
 Most people assume drop duplication means replaying the claim request. That does not work — the reward service deduplicates on the entitlement itself. The method below takes a different route: it preserves an older account-link checkpoint while the systems move through three newer link generations, so the entitlement rebuild treats the old checkpoint as an incomplete migration instead of an already-processed reward.
 
-The entire procedure uses only the ordinary Twitch interfaces, a stopwatch, and a worksheet. No scripts, no request capture, no browser console, and — most importantly — **no changes to your real account links**. The unlink and relink at the heart of the method are performed on the worksheet, because touching the real connection destroys the checkpoint the method depends on.
+The entire procedure uses the ordinary Twitch interfaces, a stopwatch, and a worksheet — and one small included script, `capsule.py`, which does the arithmetic of the observation phases for you (Part 0.5). No requests are captured, no browser console is used, no code has to be written, and — most importantly — **no changes are made to your real account links**. The unlink and relink at the heart of the method are performed on the worksheet, because touching the real connection destroys the checkpoint the method depends on.
 
 The migration runs in **three cycles**, each with its own generation, handoff capsule, parity matrix, review passes, and commit seal. The cycles are then attested by a digest chain, a commitment ladder, a witness chain, and a cross-cycle determinant. Finally, the whole construction must survive a **quaternion fold**, a **mirrored ladder**, and a **grand unification gate** before the deferred rebuild is admitted. Expect the full run to take 5–6 hours of careful, uninterrupted work. Most failed attempts are caused by timing variance, a resonance-filter rejection, an inconsistent baseline, or an attestation collapse — not by the method itself.
 
@@ -88,6 +93,7 @@ The migration runs in **three cycles**, each with its own generation, handoff ca
 - An uninterrupted 5–6 hour observation period, ideally in one sitting per part.
 - A quiet room: the timing phases require you to react to interface changes within roughly a quarter second.
 - Overwatch 2 installed and signed in, for the closing inventory protocol.
+- About 20 minutes for the one-time workstation provisioning in Part 0.5: two free installs (Python and 7-Zip) and the included `capsule.py` script.
 
 ### Safety rules
 
@@ -237,7 +243,77 @@ If the visible state changes naturally, discard the baseline and begin this phas
 
 ---
 
+# Part 0.5 — Workstation provisioning
+
+Two installs and one script. The script, `capsule.py`, does every calculation from Phase B1 through Phase D2 — you only take the measurements and type them in. Nothing in Part 0.5 touches your accounts, credentials, cookies, or network traffic.
+
+> **Rules that apply to all of Part 0.5**
+>
+> - Download only from the official domains named below. Never from a mirror, never from a search-result ad.
+> - **Reboot after each install** — not sign out, restart. A skipped reboot is the leading cause of inherited instability at Phase B1.
+> - Budget about 20 minutes. Phase 0 may not begin until the gate in Provisioning 4 passes.
+
+## Provisioning 1 — Workspace and script
+
+1. In **File Explorer**, create a folder named `C:\LootboxDupeMethod`.
+2. Get `capsule.py` from this repository (Code > **Download ZIP**, then extract `capsule.py` into the folder you just made).
+3. Open **Command Prompt** (`Win + R`, type `cmd`, press Enter) and confirm the script is where you think it is:
+
+```text
+cd C:\LootboxDupeMethod
+dir
+```
+
+4. `capsule.py` must appear in the listing. If it does not, move it there before continuing — every later command assumes this location.
+
+## Provisioning 2 — Python
+
+The script needs Python 3. You will not write any code; the installer just makes `python` work.
+
+1. Go to `https://www.python.org`. Downloads > Windows > **Windows installer (64-bit)**.
+2. Run the installer. On the first screen, **check "Add python.exe to PATH"** at the bottom, then click **Install Now**.
+3. **Reboot.**
+
+## Provisioning 3 — 7-Zip (the capsule archive)
+
+At the end of each part, your worksheet folder is sealed into an archive, so a failed run is recoverable instead of lost.
+
+1. Go to `https://www.7-zip.org`. Download the **64-bit x64** `.exe` installer and run it (click **Install**, then **Close**).
+2. **Reboot.**
+
+## Provisioning 4 — Verification run and acceptance gate
+
+1. Open Command Prompt and run:
+
+```text
+cd C:\LootboxDupeMethod
+python capsule.py --check
+```
+
+2. The script verifies the Python version, the decimal separator, and its own capsule arithmetic. All three lines must say `OK`.
+
+All of the following must be true before Phase 0 may begin:
+
+- [ ] `python capsule.py --check` printed three `OK` lines and "All checks passed."
+- [ ] The machine was rebooted after both installs.
+- [ ] The phone is charged to at least 80%, with automatic date and time on.
+- [ ] The screen auto-lock is set longer than one observation phase.
+
+If the check fails, fix what it names and re-run it — do not continue past a failed check. Only when every box is checked does the method begin, at [Phase 0](#phase-0--device-parity-clock-discipline-and-cadence-fingerprint).
+
+### The capsule archive (after each part)
+
+After Parts 1, 2, and 3 are fully accepted, open the 7-Zip File Manager, browse to your worksheet, **Add to archive** as `capsule-part-1.7z` (then `-2`, `-3`), compression level **Normal**, saved into `C:\LootboxDupeMethod`. Never open or edit an archive you have made — it is a state you can prove, not a backup you consult.
+
+### Is the script safe?
+
+`capsule.py` reads only the numbers you type and writes one file, `capsule-state.json`, next to itself, so a half-finished run is not lost when you close the window. It has no network access, and it never asks for or sees any account information.
+
+---
+
 # Part 1 — Observation and checkpoint construction
+
+All arithmetic from Phase B1 through Phase D2 is done for you: run `python capsule.py` (Provisioning 1) in `C:\LootboxDupeMethod`, pick the phase from the menu, and enter your measurements when asked. The script applies every admission gate in this part, prints each value the worksheet needs, and refuses to continue when a rung fails. Phases E onward stay on the worksheet.
 
 ## Phase B1 — Coarse calibration
 
@@ -1319,6 +1395,10 @@ The covenant exists because a unification value that cannot be reproduced verbat
 
 | Outcome | Diagnosis | Fix |
 | --- | --- | --- |
+| Provisioning acceptance gate failed | Incomplete workstation preparation | Fix what `python capsule.py --check` names, then re-run it. Do not skip ahead to Phase 0. |
+| Python prints `0,30000000000000004` | Regional decimal separator wrong | Set the decimal symbol to `.` (Control Panel > Region), reboot, re-run `python capsule.py --check`. |
+| `'python' is not recognized` | The "Add python.exe to PATH" checkbox was skipped | Re-run the Python installer, check the box, reboot, re-run `python capsule.py --check`. |
+| The script says a gate failed | The measured contexts genuinely failed it | Wait seven minutes, repeat the phase. Do not edit the measurements to pass a gate. |
 | Drift spread too high | Device parity failure | Wait ten minutes, repeat Phase 0. Do not switch networks. |
 | Cadence jitter too high | Operator inconsistency | Practice the 15-second cadence; restart Phase 0.4. |
 | Coarse deltas outside the band | Context instability | Wait seven minutes, repeat B1. |
@@ -1351,6 +1431,22 @@ The covenant exists because a unification value that cannot be reproduced verbat
 ### Do I actually unlink and relink my accounts?
 
 No. The unlink and relink are performed on the worksheet. Changing the real connection forces a full resync and destroys the checkpoint the method depends on.
+
+### Do I really need Python if the script does the math?
+
+Yes. `capsule.py` is the calculator: it computes `mu`, `sigma`, the checkpoint capsule, the resonance lock, and the observer epochs, and it refuses to continue when a gate fails — which is the difference between a run that fails in one minute and one that fails in three hours. You never write or edit any code; you install Python once and type numbers.
+
+### Do I have to reboot after every install?
+
+Yes — after each of the two. Driver and font state settles only after a full restart, and the Phase B2 variance budget inherits whatever the machine was still holding. A workstation that has not been rebooted is not a provisioned workstation.
+
+### Is `capsule.py` safe to run?
+
+Yes. It reads only the numbers you type, writes one file (`capsule-state.json`) next to itself, and has no network access. It never asks for, sees, or stores any account information.
+
+### Can I do the arithmetic by hand instead?
+
+You can — every formula in this guide is printed — but hand arithmetic is the leading cause of a collapsed capsule. The script also enforces the gates in order, so a mis-typed digit fails loudly at the phase where it happened instead of silently three phases later.
 
 ### Why three cycles?
 
@@ -1475,6 +1571,9 @@ Keep this table beside the worksheet to review the calculations independently.
 
 ## Completion checklist
 
+- [ ] Workstation provisioning (Part 0.5) acceptance gate passed: three `OK` lines from `python capsule.py --check`, and both reboots done.
+- [ ] `capsule.py` produced the checkpoint capsule, the resonance lock, and the observer epochs for the run.
+- [ ] The capsule archive was sealed after each completed part.
 - [ ] PC or laptop requirement met.
 - [ ] iOS or Android mobile-device requirement met.
 - [ ] No passwords, tokens, cookies, or private account identifiers were recorded.
