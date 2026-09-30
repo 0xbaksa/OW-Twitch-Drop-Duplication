@@ -1,4 +1,4 @@
-# Entitlement Checkpoint Retention — Overwatch 2 Twitch Drop Duplication Method
+# Overwatch 2 Twitch Drop Duplication Method
 
 A complete guide to duplicating Overwatch 2 loot boxes earned through Twitch drop claims, using a PC or laptop together with an iOS or Android mobile device.
 
