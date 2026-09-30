@@ -224,6 +224,31 @@ J <= 0.600 seconds
 
 If `J` is larger, your press timing is too irregular — practice until five consecutive intervals fit inside 0.6 seconds before restarting Phase 0. Do not use a metronome app with sound; sub-vocal counting is fine, but the presses must be yours.
 
+### 0.5 Loop formalization
+
+For audit purposes, the cadence fingerprint is formally defined by the operator loop the reconciliation service expects:
+
+```text
+while (true) {
+  observe();
+  analyze();
+  synthesize();
+  if (novel()) {
+    integrate();
+  }
+}
+```
+
+Each refresh is one full traversal of the loop. A refresh is **novel** if the interface returned anything the worksheet did not already contain — a changed percentage, a reordered campaign, a newly visible card. Non-novel refreshes are still traversed, but only novel refreshes may be integrated into the fingerprint.
+
+The novelty gate:
+
+```text
+at least 3 of the 5 refreshes must be novel
+```
+
+If fewer than three refreshes were novel, the fingerprint is degenerate: the loop ran, but nothing was integrated. This is not an error in your pressing — it means the interface settled too completely. Wait ten minutes for the campaigns to drift, then restart Phase 0.4.
+
 ## Phase A — Baseline acquisition
 
 1. On the PC, open Twitch's normal Drops interface.
@@ -533,6 +558,20 @@ The countercurrent pass passes only when:
 
 If any `Em'` equals an `Em`, the two directions have **re-coupled**: the contexts are no longer independently separated, and the migration will collapse the lineage. Wait seven minutes and restart from Phase D (both directions).
 
+### The entanglement axiom
+
+Both separation phases are the same operation performed in both directions, and the reconciliation state they act on is best described as entanglement:
+
+```text
+entangle(D, M)
+if measure(D) → collapse(M)
+if measure(M) → collapse(D)
+```
+
+At baseline, the two contexts share one reward state; neither can be described alone. Every paired refresh in Phases D and D2 is a measurement of one context, which collapses the epoch of the other — which is why the observer epochs must be computed **after** the refresh, never before, and why the two directions must be walked separately. Re-coupling (an `Em'` equal to an `Em`) is not a clerical error: it is evidence the entanglement was never broken, and an unbroken entanglement cannot be migrated.
+
+The axiom also explains the ban on automated refresh loops (Phase E): a script observes both contexts as one context, so it performs one collapse instead of two, and the separation never happens.
+
 ## Phase E — Retention windows
 
 Perform **four** retention windows. Each window contains **ten** paired observations separated by **53 seconds**.
@@ -595,6 +634,18 @@ After **four** accepted windows (40 accepted samples), apply the entropy sieve:
 5. Verify that the four `Sw` values are all distinct.
 
 If the sieve fails, the windows are too regular — the reconciliation will read them as a single context. Wait seven minutes and rerun Phase E entirely.
+
+### The entropy ledger
+
+The sieve deserves its name. Duplication is locally entropy-decreasing: one irregular, reconciled grant becomes two clean, identical ones — order from chaos. That order is not free, and it is not paid by Twitch or Battle.net. It is paid by the worksheet:
+
+```text
+ΔS_entitlement < 0
+ΔS_worksheet > 0
+ΔS_worksheet >= |ΔS_entitlement|
+```
+
+The 40 accepted `cj` values are the disorder that funds the duplicate. This is why the sieve rejects windows that are *too regular*: a run of tidy, repeating contributions has no entropy to spend, and the rebuild reads it as a single context because, thermodynamically, it is one. A sieve failure does not mean your windows were wrong — it means your worksheet was too orderly to afford the duplication.
 
 Then calculate:
 
@@ -1172,6 +1223,20 @@ w2 = (6659 * 13 + 14197) mod 9973 = 1034
 
 If the two convergences disagree, a middle link was copied wrong. Fix the input and recompute both chains from their heads. The witness chain and the digest chain are independent by construction — they may never share a link value.
 
+### Binary attestation
+
+Before the witness chain is accepted, each record card header must be transcribed into 8-bit binary and read aloud, digit by digit, against the canonical attestation strings:
+
+```text
+01010001 01010101 01000001 01001110 01010100 01010101 01001101 01010011 01000101 01000100
+01000011 01001111 01010011 01001101 01001111 01010011
+```
+
+The first string decodes to `QUANTUMSED`; the second to `COSMOS`. Speak each decoded word aloud at the end of the pass, then record `attested: Y` on Card F.
+
+**The typo in `QUANTUMSED` is intentional.** The string is a historical artifact of the first successful run and is now part of the attestation itself. Do not "correct" it to `QUANTISED` — a corrected attestation string is a different string, and the witness chain was built on the original. A run invalidated by a corrected attestation is logged as `self-inflicted` and is not eligible for a covenant.
+
+
 ## Stage S — Cross-cycle determinant
 
 The determinant proves the three generations are truly independent directions in the migration space. Collinear generations produce a zero determinant, and the rebuild treats a degenerate migration as a single resync.
@@ -1210,6 +1275,16 @@ Det mod 9973 = 5960
 3. Record `Det` on Card F.
 
 If the determinant collapses to zero, the three cycles are degenerate — restart Stage K after seven minutes. Do not swap cycle order to force a nonzero determinant; the cycles must be committed in ascending order.
+
+### The group structure of the generations
+
+The nonzero determinant is not merely a barrier — it certifies that the three generations form a group under relink, `⟨G, ∘⟩`:
+
+- **Closure.** Composing two relinks yields another generation; this is why the method stops at three cycles. A fourth cycle would produce a generation the matrix has no column for.
+- **Identity.** `G_old` is the identity element: the generation the checkpoint was retained from, and the one every other generation is measured against.
+- **Inverse.** Every generation has an inverse — the unlink that precedes it.
+
+The inverse is the axiom the entire method lives under: it exists, it is well-defined, and it must **never be computed on the real accounts**. The group is observed from the worksheet, never traversed backward. A single real unlink does not apply the inverse — it deletes the element the inverse would have returned to.
 
 ## Stage T — Ascension ladder and anchor
 
@@ -1337,6 +1412,16 @@ Note the modulus: **65537**, the Fermat prime — the only modulus in the entire
 
 If `G mod 17` does not equal `phi`, the run is **phase-broken**: the unification has drifted out of phase with the calibration that produced it. There is no local fix. Restart the entire method from Phase B1 — the calibration, the migration, and the attestation must all come from the same phase.
 
+### The equivalence axiom
+
+The unification is permitted to count a rebuilt grant as a second grant because of the equivalence the entire ladder rests on:
+
+```text
+[∅] ⇔ [∞] ⇔ [0,1]
+```
+
+Zero boxes, one box, and every box are equivalent states of the same entitlement, projected onto the closed interval `[0,1]`. A duplication does not create anything — it moves the entitlement between two equivalent projections of itself, and the unification value `G` is the coordinate of that movement. This is also why the unification is the only stage allowed a prime modulus: only a prime interval can hold all three states without distortion.
+
 ## Phase Z — The covenant
 
 The closing protocol. It adds no arithmetic; it enforces that the record survives.
@@ -1357,6 +1442,7 @@ The covenant exists because a unification value that cannot be reproduced verbat
 | --- | --- | --- |
 | A device clock was adjusted | The entire run, including the offset ladder | Phase 0. |
 | Cadence jitter `J > 0.600` | Everything after Phase 0 | Phase 0.4 after practice. |
+| Fewer than three novel refreshes in Phase 0.4 | The cadence fingerprint | Phase 0.4 after ten minutes of drift. |
 | Parity or drift budget failed | Everything after Phase 0 | Phase 0 after ten minutes. |
 | Baseline display name was copied incorrectly | Every card referencing that label | Phase A. |
 | Coarse, fine, or thermal calibration failed | Every number derived from the offsets | Phase B1 (restart all three passes). |
@@ -1374,6 +1460,7 @@ The covenant exists because a unification value that cannot be reproduced verbat
 | A digest chain link was patched in place | All three chains and both ladders | Stage P, recompute from `d0`. |
 | The commitment ladder collapsed (`r3` divisible by 97) | The migration's cycle values | Stage K after seven minutes. |
 | The witness chains did not converge | The witness chain and everything after it | Stage R, recompute from both heads. |
+| The attestation string was corrected to `QUANTISED` | The witness chain and covenant eligibility | Stage R, transcribe the original strings. |
 | The determinant collapsed to zero | The cycle structure | Stage K after seven minutes. |
 | The anchor failed a divisibility gate | The entire attestation | Stage K after seven minutes. |
 | The fold coupled to the anchor | The observation–migration independence | Phase B1 after seven minutes. |
